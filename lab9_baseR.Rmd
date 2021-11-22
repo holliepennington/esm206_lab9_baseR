@@ -1,0 +1,41 @@
+---
+title: "Lab 9 Base R"
+author: "Hollie Pennington"
+date: "11/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#objects and classes 
+
+## Vectors 
+
+### Creating a vector 
+
+```{r}
+#numeric vector 
+my_vector <- vector(mode = "numeric", length = 100)
+#logical vector
+my_second_vector <- vector(mode = "logical", length = 20)
+```
+
+### Vector properties 
+
+#### Length 
+
+```{r}
+#length of my vector
+```
+
+
+#### class 
+
+```{r}
+# what's in my vector
+```
+
+
+#vector properties 
