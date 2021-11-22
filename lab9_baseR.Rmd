@@ -24,18 +24,193 @@ my_second_vector <- vector(mode = "logical", length = 20)
 
 ### Vector properties 
 
+
 #### Length 
 
 ```{r}
 #length of my vector
+length(my_vector)
+length(my_second_vector)
 ```
-
 
 #### class 
 
+#vector properties 
+
 ```{r}
 # what's in my vector
+class(my_vector)
+class(my_second_vector)
+```
+
+#### Indexing (accessing) vectors
+
+```{r}
+# using c to create a vector 
+my_vector <- c(1:50)
+
+# what's the first element? 
+my_vector[1]
+
+# what's the last element? 
+my_vector[-1]
+
+# what's the seventh element? 
+my_vector[7]
+
+# select a range from a vector 
+my_vector[3:7]
+```
+
+## Matrices 
+
+### creating matrices 
+
+```{r}
+#Create a 10 X 10 matrix full of NA's 
+my_matrix <- matrix(data = 1:100, nrow = 20, ncol = 5)
+```
+
+### Matrix properties 
+
+#### dimensions 
+
+```{r}
+#what are my dimensions 
+dim(my_matrix)
+```
+
+#### Length 
+
+```{r}
+# how many elements are there? 
+length(my_matrix)
+```
+
+#### Class
+
+```{r}
+class(my_matrix)
+```
+#### Indexing 
+
+```{r}
+my_matrix[2,]
+# index a column 
+
+my_matrix[,3]
+
+#index a given cell 
+my_matrix[8,3]
+
+# indexing and replace 
+my_matrix[8,3] <- 100000
+
+# replace an entire column 
+my_matrix[,5] <- 10
+```
+
+# control flow 
+
+## 'for' loops 
+
+variable (counter), sequene, expression 
+
+```{r}
+for (i in 1:10){
+  print("i")
+}
+```
+
+#generating random numbers
+
+```{r}
+rnorm(n = 5, mean = 10, sd = 2)
+```
+
+#lets combine all of the above 
+
+We will use 'numeric' to create an empty vector 
+we will use 'for' to iterate along items of that empty vector 
+we will use '[]' to access each a lot and fill-in that empty vector 
+we will use 'rnorm' to sample values from a random normal distribution 
+we will plot the trend
+
+$$N_{t}=N_{t-1} + r\left(1 - \frac{N_{t-1}}{K}\right)$$
+
+$$
+r \sim norm(\mu = 1.5, \sigma = 0.8)
+$$
+## writing the code down 
+
+```{r}
+# set up model parameters 
+K <- 100 
+nsteps <- 100
+mu <- 1.5
+sigma <- 0.8 
+
+# set up model objects 
+N <- vector(mode = "numeric", length = nsteps)
+N[1] <- 25
+
+# model it 
+for(t in 2:nsteps){
+  r <- rnorm(n = 1, mean = mu, sd = sigma)
+  N[t] <- N[t-1] + r * (1 - (N[t-1]/K))
+}
+
+#visualize it 
+plot(N)
+```
+
+# Something More 
+
+We will use 'matrix' to create an empty matrix (rows are time, columns are runs)
+we will repeat the process 
+
+```{r}
+# set up model parameters 
+K <- 100 
+nsteps <- 100
+mu <- 0.4
+sigma <- 1 
+
+# set up model objects 
+N <- matrix(data = NA, nrow = nsteps, ncol = 100)
+N[1,] <- 25
+
+# model it 
+for(t in 2:nsteps){
+  r <- rnorm(n = 100, mean = mu, sd = sigma)
+  N[t,] <- N[t-1,] + r * (1 - (N[t-1,]/K))
+}
+
+#visualize it 
+matplot(N, type = "l")
+```
+
+# Bring in your freinds! 
+
+Covert it to thinks we know about: 'ggplot2' 
+
+```{r}
+# load tidyverse
+library(tidyverse)
+
+# create date.frame 
+my_data <- as_tibble(N) %>%
+  mutate(time = 1:nsteps) %>% 
+  gather(run, N, -time)
+
+#visualize it 
+ggplot(data = my_data, mapping = aes(x = time, y = N)) + 
+  geom_line(aes(group = run), size = 0.1, alpha = 0.5) + 
+  stat_summary(geom = "line", fun = mean, color = "red") + 
+  theme_bw() + 
+  labs(x = "Time (years)", y = "Population size (N)")
+
 ```
 
 
-#vector properties 
+
